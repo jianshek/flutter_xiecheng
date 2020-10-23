@@ -1,14 +1,16 @@
-import 'package:flutter_xiecheng/model/local_nav_list_model.dart';
-class SalesBoxModel{
-  String icon;
-  String moreUrl;
 
-  LocalNavListModel bigCard1;
-  LocalNavListModel bigCard2;
-  LocalNavListModel smallCard1;
-  LocalNavListModel smallCard2;
-  LocalNavListModel smallCard3;
-  LocalNavListModel smallCard4;
+import 'package:flutter_xiecheng/model/common_model.dart';
+
+//活动入口模型
+class SalesBoxModel {
+  final String icon;
+  final String moreUrl;
+  final CommonModel bigCard1;
+  final CommonModel bigCard2;
+  final CommonModel smallCard1;
+  final CommonModel smallCard2;
+  final CommonModel smallCard3;
+  final CommonModel smallCard4;
 
   SalesBoxModel(
       {this.icon,
@@ -20,16 +22,16 @@ class SalesBoxModel{
         this.smallCard3,
         this.smallCard4});
 
-  SalesBoxModel.fromJson(Map<String, dynamic> json) {
-    icon = json['icon'];
-    moreUrl = json['moreUrl'];
-    bigCard1 = json['bigCard1'] != null ? new LocalNavListModel.fromJson(json['bigCard1']) : null;
-    bigCard2 = json['bigCard2'] != null ? new LocalNavListModel.fromJson(json['bigCard2']) : null;
-    smallCard1 = json['smallCard1'] != null ? new LocalNavListModel.fromJson(json['smallCard1']) : null;
-    smallCard2 = json['smallCard2'] != null ? new LocalNavListModel.fromJson(json['smallCard2']) : null;
-    smallCard3 = json['smallCard3'] != null ? new LocalNavListModel.fromJson(json['smallCard3']) : null;
-    smallCard4 = json['smallCard4'] != null ? new LocalNavListModel.fromJson(json['smallCard4']) : null;
+  factory SalesBoxModel.fromJson(Map<String, dynamic> json) {
+    return SalesBoxModel(
+      icon: json['icon'],
+      moreUrl: json['moreUrl'],
+      bigCard1: CommonModel.fromJson(json['bigCard1']),
+      bigCard2: CommonModel.fromJson(json['bigCard2']),
+      smallCard1: CommonModel.fromJson(json['smallCard1']),
+      smallCard2: CommonModel.fromJson(json['smallCard2']),
+      smallCard3: CommonModel.fromJson(json['smallCard3']),
+      smallCard4: CommonModel.fromJson(json['smallCard4']),
+    );
   }
-
-
 }

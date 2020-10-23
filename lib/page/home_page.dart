@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_xiecheng/widget/local_nav.dart';
+import 'package:flutter_xiecheng/model/common_model.dart';
+import 'package:flutter_xiecheng/dao/home_dao.dart';
+import 'package:flutter_xiecheng/model/home_model.dart';
 
 const APPBAR_SCROLL_OFFSET = 100; //appBar最大偏移量
 
@@ -18,6 +22,15 @@ class __HomePageState extends State<HomePage>{
   ];
 
   double _appBarAlpha = 0;  //AppBar透明度
+  List<CommonModel> localNavList = [];  //appBar下面的5个按钮
+
+  @override
+  void initState() {
+    super.initState();
+    _handleRefresh();
+  }
+
+
 
   _onScroll(offset) {
     double alpha = offset / APPBAR_SCROLL_OFFSET;
@@ -58,9 +71,24 @@ class __HomePageState extends State<HomePage>{
               )
           ),
           AppBarWidget(appBarAlpha: _appBarAlpha),
+          LocalNavWidget(localNavList: localNavList),
         ],
       )
     );
+  }
+
+
+  Future<Null> _handleRefresh() async{
+    try{
+
+      HomeModel homeModel = await HomeDao.fetch();
+      setState(() {
+        localNavList = homeModel.localNavList;
+      });
+
+    }catch(e){
+      print(e);
+    }
   }
 
 }
@@ -115,6 +143,29 @@ class BannerWidget extends StatelessWidget{
         },
         pagination: new SwiperPagination()
       ),
+    );
+  }
+
+}
+
+//轮播图下面的5个按钮
+class LocalNavWidget extends StatelessWidget{
+
+  final List _localNavList;
+
+  const LocalNavWidget({Key key, @required List localNavList}) :  _localNavList = localNavList , super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Positioned(    //用在Stack()组件中
+        top: 188,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
+          child: LocalNav(localNavList: _localNavList),
+        )
     );
   }
 
