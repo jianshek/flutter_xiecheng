@@ -4,6 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutter_xiecheng/widget/loading_container.dart';
 
+const CATCH_URLS = [
+  'm.ctrip.com/',
+  'm.ctrip.com/html5/',
+  'm.ctrip.com/html5',
+  'm.ctrip.com/html5/you/',
+  'm.ctrip.com/webapp/you/foods/',
+  'm.ctrip.com/webapp/vacations/tour/list'
+];
+
 class WebView extends StatefulWidget {
   final String url;
   final String statusBarColor;
@@ -43,7 +52,7 @@ class _WebViewState extends State<WebView> {
         webViewReference.onStateChanged.listen((WebViewStateChanged state) {
       switch (state.type) {
         case WebViewState.startLoad:
-          if (_isToMain(state.url) && !exiting) {
+          if (_isToMain(state.url) && !exiting) {     //防止返回到携程网页..
             if (widget.backForbid) {
               webViewReference.launch(widget.url);
             } else {
@@ -63,6 +72,12 @@ class _WebViewState extends State<WebView> {
 
   _isToMain(String url) {
     bool contain = false;
+    for (final value in CATCH_URLS) {
+      if (url?.endsWith(value) ?? false) {
+        contain = true;
+        break;
+      }
+    }
     return contain;
   }
 
