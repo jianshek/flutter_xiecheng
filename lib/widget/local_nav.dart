@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_xiecheng/model/common_model.dart';
+import 'package:flutter_xiecheng/widget/webview.dart';
 
 class LocalNav extends StatelessWidget{
 
@@ -46,7 +47,12 @@ class LocalNav extends StatelessWidget{
 
     return GestureDetector(
       onTap: (){
-
+        //自定义一个路由
+        Navigator.push(context, new MaterialPageRoute(builder: (context) => WebView(
+          url: model.url,
+          statusBarColor: model.statusBarColor,
+          hideAppBar: model.hideAppBar,
+        )));
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
