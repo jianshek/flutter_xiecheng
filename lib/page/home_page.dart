@@ -7,12 +7,17 @@ import 'package:flutter_xiecheng/model/home_model.dart';
 
 const APPBAR_SCROLL_OFFSET = 100; //appBar最大偏移量
 
-class HomePage extends StatefulWidget{
+class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() =>__HomePageState();
 }
 
-class __HomePageState extends State<HomePage>{
+class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
+
+  @override
+  bool get wantKeepAlive {
+    return true;
+  }
 
   //轮播图数据
   List _bannerList = [
@@ -48,7 +53,6 @@ class __HomePageState extends State<HomePage>{
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Stack(  //stack:相当于相对布局,后添加的控件会显示在层级最上方
         children: [
@@ -90,6 +94,7 @@ class __HomePageState extends State<HomePage>{
       print(e);
     }
   }
+
 
 }
 
