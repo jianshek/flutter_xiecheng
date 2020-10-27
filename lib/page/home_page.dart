@@ -4,6 +4,8 @@ import 'package:flutter_xiecheng/widget/local_nav.dart';
 import 'package:flutter_xiecheng/model/common_model.dart';
 import 'package:flutter_xiecheng/dao/home_dao.dart';
 import 'package:flutter_xiecheng/model/home_model.dart';
+import 'package:flutter_xiecheng/widget/grid_nav.dart';
+import 'package:flutter_xiecheng/model/grid_nav_model.dart';
 
 const APPBAR_SCROLL_OFFSET = 100; //appBar最大偏移量
 
@@ -28,6 +30,7 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
 
   double _appBarAlpha = 0;  //AppBar透明度
   List<CommonModel> localNavList = [];  //appBar下面的5个按钮
+  GridNavModel gridNavModel;
 
   @override
   void initState() {
@@ -70,12 +73,23 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
                 child: ListView(
                   children: [
                     BannerWidget(bannerList: _bannerList),
+                    LocalNavWidget(localNavList: localNavList),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
+                      margin: EdgeInsets.only(top: 10),
+                      child: Column(
+                        children: [
+                          GridNav(gridNavModel: gridNavModel),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               )
           ),
           AppBarWidget(appBarAlpha: _appBarAlpha),
-          LocalNavWidget(localNavList: localNavList),
+
         ],
       )
     );
@@ -88,6 +102,7 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
       HomeModel homeModel = await HomeDao.fetch();
       setState(() {
         localNavList = homeModel.localNavList;
+        gridNavModel = homeModel.gridNav;
       });
 
     }catch(e){
@@ -175,6 +190,7 @@ class LocalNavWidget extends StatelessWidget{
   }
 
 }
+
 
 
 

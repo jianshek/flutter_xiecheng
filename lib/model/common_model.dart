@@ -22,9 +22,9 @@ class CommonModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['icon'] = this.icon;
     data['title'] = this.title;
-    data['url'] = this.title;
-    data['statusBarColor'] = this.title;
-    data['hideAppBar'] = this.title;
+    data['url'] = this.url;
+    data['statusBarColor'] = this.statusBarColor;
+    data['hideAppBar'] = this.hideAppBar;
     return data;
   }
 }
