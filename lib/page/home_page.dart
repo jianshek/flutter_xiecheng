@@ -7,6 +7,8 @@ import 'package:flutter_xiecheng/model/home_model.dart';
 import 'package:flutter_xiecheng/widget/grid_nav.dart';
 import 'package:flutter_xiecheng/model/grid_nav_model.dart';
 import 'package:flutter_xiecheng/widget/sub_nav.dart';
+import 'package:flutter_xiecheng/widget/sales_box.dart';
+import 'package:flutter_xiecheng/model/sales_box_model.dart';
 
 const APPBAR_SCROLL_OFFSET = 100; //appBar最大偏移量
 
@@ -33,6 +35,7 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
   List<CommonModel> localNavList = [];  //appBar下面的5个按钮
   GridNavModel gridNavModel;
   List<CommonModel> subNavList = [];
+  SalesBoxModel salesBoxModel;
 
   @override
   void initState() {
@@ -85,6 +88,7 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
                           GridNav(gridNavModel: gridNavModel),
                           Padding(padding: EdgeInsets.only(top: 10)),
                           SubNav(subNavList: subNavList),
+                          SalesBox(salesBoxModel: salesBoxModel),
                         ],
                       ),
                     ),
@@ -108,6 +112,7 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
         localNavList = homeModel.localNavList;
         gridNavModel = homeModel.gridNav;
         subNavList = homeModel.subNavList;
+        salesBoxModel = homeModel.salesBox;
       });
 
     }catch(e){
@@ -183,14 +188,10 @@ class LocalNavWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-
-    return Positioned(    //用在Stack()组件中
-        top: 188,
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
-          child: LocalNav(localNavList: _localNavList),
-        )
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
+      child: LocalNav(localNavList: _localNavList),
     );
   }
 
