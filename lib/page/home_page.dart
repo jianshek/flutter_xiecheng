@@ -9,6 +9,7 @@ import 'package:flutter_xiecheng/model/grid_nav_model.dart';
 import 'package:flutter_xiecheng/widget/sub_nav.dart';
 import 'package:flutter_xiecheng/widget/sales_box.dart';
 import 'package:flutter_xiecheng/model/sales_box_model.dart';
+import 'package:flutter_xiecheng/widget/loading_container.dart';
 
 const APPBAR_SCROLL_OFFSET = 100; //appBar最大偏移量
 
@@ -36,6 +37,7 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
   GridNavModel gridNavModel;
   List<CommonModel> subNavList = [];
   SalesBoxModel salesBoxModel;
+  bool _isLoading = true; //是否是加载状态
 
   @override
   void initState() {
@@ -62,43 +64,46 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(  //stack:相当于相对布局,后添加的控件会显示在层级最上方
-        children: [
-          MediaQuery.removePadding(       //MediaQuery:设备信息(屏幕宽高,设备旋转等)
-              removeTop: true,            //去除顶部padding,listview有默认的顶部padding
-              context: context,
-              child: NotificationListener(  //监听事件()
-                onNotification: (scrollNotification){
-                  if (scrollNotification is ScrollUpdateNotification &&  //监听滑动事件
-                      scrollNotification.depth == 0) {          //depth=0:表示只监听child组件,child里面的子组件不监听
-                    //滚动且是列表滚动的时候
-                    _onScroll(scrollNotification.metrics.pixels);
-                  }
-                },
-                child: ListView(
-                  children: [
-                    BannerWidget(bannerList: _bannerList),
-                    LocalNavWidget(localNavList: localNavList),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
-                      margin: EdgeInsets.only(top: 10),
-                      child: Column(
-                        children: [
-                          GridNav(gridNavModel: gridNavModel),
-                          Padding(padding: EdgeInsets.only(top: 10)),
-                          SubNav(subNavList: subNavList),
-                          SalesBox(salesBoxModel: salesBoxModel),
-                        ],
+      body: LoadingContainer(
+        isLoading: _isLoading,
+        cover: true,
+        child: Stack(  //stack:相当于相对布局,后添加的控件会显示在层级最上方
+          children: [
+            MediaQuery.removePadding(       //MediaQuery:设备信息(屏幕宽高,设备旋转等)
+                removeTop: true,            //去除顶部padding,listview有默认的顶部padding
+                context: context,
+                child: NotificationListener(  //监听事件()
+                  onNotification: (scrollNotification){
+                    if (scrollNotification is ScrollUpdateNotification &&  //监听滑动事件
+                        scrollNotification.depth == 0) {          //depth=0:表示只监听child组件,child里面的子组件不监听
+                      //滚动且是列表滚动的时候
+                      _onScroll(scrollNotification.metrics.pixels);
+                    }
+                  },
+                  child: ListView(
+                    children: [
+                      BannerWidget(bannerList: _bannerList),
+                      LocalNavWidget(localNavList: localNavList),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
+                        margin: EdgeInsets.only(top: 10),
+                        child: Column(
+                          children: [
+                            GridNav(gridNavModel: gridNavModel),
+                            Padding(padding: EdgeInsets.only(top: 10)),
+                            SubNav(subNavList: subNavList),
+                            SalesBox(salesBoxModel: salesBoxModel),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-          ),
-          AppBarWidget(appBarAlpha: _appBarAlpha),
-
-        ],
+                    ],
+                  ),
+                )
+            ),
+            AppBarWidget(appBarAlpha: _appBarAlpha),
+          ],
+        ),
       )
     );
   }
@@ -113,10 +118,14 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
         gridNavModel = homeModel.gridNav;
         subNavList = homeModel.subNavList;
         salesBoxModel = homeModel.salesBox;
+        _isLoading = false;
       });
 
     }catch(e){
       print(e);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

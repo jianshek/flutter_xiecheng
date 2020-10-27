@@ -7,7 +7,7 @@ class LoadingContainer extends StatelessWidget{
   final bool isLoading;
   final bool cover;
 
-  const LoadingContainer({@required  this.isLoading,@required  this.cover,@required  this.child});
+  const LoadingContainer({@required  this.isLoading,this.cover = false,@required  this.child});
 
   Widget get _loadingView {
     return Center(
@@ -29,7 +29,10 @@ class LoadingContainer extends StatelessWidget{
     * }
     * */
     return !cover ? !isLoading ? child : _loadingView : Stack(
-      children: [child, isLoading ? _loadingView: Container()],
+      children: [
+        child,
+        isLoading ? _loadingView: Container()
+      ],
     );
   }
 
