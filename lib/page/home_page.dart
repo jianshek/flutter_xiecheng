@@ -80,25 +80,28 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
                       _onScroll(scrollNotification.metrics.pixels);
                     }
                   },
-                  child: ListView(
-                    children: [
-                      BannerWidget(bannerList: _bannerList),
-                      LocalNavWidget(localNavList: localNavList),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
-                        margin: EdgeInsets.only(top: 10),
-                        child: Column(
-                          children: [
-                            GridNav(gridNavModel: gridNavModel),
-                            Padding(padding: EdgeInsets.only(top: 10)),
-                            SubNav(subNavList: subNavList),
-                            SalesBox(salesBoxModel: salesBoxModel),
-                          ],
+                  child: RefreshIndicator(
+                    onRefresh: _handleRefresh,
+                    child: ListView(
+                      children: [
+                        BannerWidget(bannerList: _bannerList),
+                        LocalNavWidget(localNavList: localNavList),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
+                          margin: EdgeInsets.only(top: 10),
+                          child: Column(
+                            children: [
+                              GridNav(gridNavModel: gridNavModel),
+                              Padding(padding: EdgeInsets.only(top: 10)),
+                              SubNav(subNavList: subNavList),
+                              SalesBox(salesBoxModel: salesBoxModel),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  )
                 )
             ),
             AppBarWidget(appBarAlpha: _appBarAlpha),
@@ -127,6 +130,8 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
         _isLoading = false;
       });
     }
+
+    return null;
   }
 
 
