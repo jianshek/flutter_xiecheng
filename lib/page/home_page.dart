@@ -6,6 +6,7 @@ import 'package:flutter_xiecheng/dao/home_dao.dart';
 import 'package:flutter_xiecheng/model/home_model.dart';
 import 'package:flutter_xiecheng/widget/grid_nav.dart';
 import 'package:flutter_xiecheng/model/grid_nav_model.dart';
+import 'package:flutter_xiecheng/widget/sub_nav.dart';
 
 const APPBAR_SCROLL_OFFSET = 100; //appBar最大偏移量
 
@@ -31,6 +32,7 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
   double _appBarAlpha = 0;  //AppBar透明度
   List<CommonModel> localNavList = [];  //appBar下面的5个按钮
   GridNavModel gridNavModel;
+  List<CommonModel> subNavList = [];
 
   @override
   void initState() {
@@ -81,6 +83,8 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
                       child: Column(
                         children: [
                           GridNav(gridNavModel: gridNavModel),
+                          Padding(padding: EdgeInsets.only(top: 10)),
+                          SubNav(subNavList: subNavList),
                         ],
                       ),
                     ),
@@ -103,6 +107,7 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
       setState(() {
         localNavList = homeModel.localNavList;
         gridNavModel = homeModel.gridNav;
+        subNavList = homeModel.subNavList;
       });
 
     }catch(e){
