@@ -25,19 +25,15 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
     return true;
   }
 
-  //轮播图数据
-  List _bannerList = [
-    'http://pages.ctrip.com/commerce/promote/20180718/yxzy/img/640sygd.jpg',
-    'https://dimg04.c-ctrip.com/images/700u0r000000gxvb93E54_810_235_85.jpg',
-    'https://dimg04.c-ctrip.com/images/700c10000000pdili7D8B_780_235_57.jpg'
-  ];
 
   double _appBarAlpha = 0;  //AppBar透明度
+  List<CommonModel> bannerList = [];    //轮播图
   List<CommonModel> localNavList = [];  //appBar下面的5个按钮
-  GridNavModel gridNavModel;
-  List<CommonModel> subNavList = [];
-  SalesBoxModel salesBoxModel;
+  GridNavModel gridNavModel;            //三行渐变
+  List<CommonModel> subNavList = [];    //两行橙色
+  SalesBoxModel salesBoxModel;          //热门活动
   bool _isLoading = true; //是否是加载状态
+
 
   @override
   void initState() {
@@ -72,19 +68,19 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
             MediaQuery.removePadding(       //MediaQuery:设备信息(屏幕宽高,设备旋转等)
                 removeTop: true,            //去除顶部padding,listview有默认的顶部padding
                 context: context,
-                child: NotificationListener(  //监听事件()
-                  onNotification: (scrollNotification){
-                    if (scrollNotification is ScrollUpdateNotification &&  //监听滑动事件
-                        scrollNotification.depth == 0) {          //depth=0:表示只监听child组件,child里面的子组件不监听
-                      //滚动且是列表滚动的时候
-                      _onScroll(scrollNotification.metrics.pixels);
-                    }
-                  },
-                  child: RefreshIndicator(
-                    onRefresh: _handleRefresh,
-                    child: ListView(
+                child: RefreshIndicator(
+                  onRefresh: _handleRefresh,
+                  child: NotificationListener(  //监听事件
+                    onNotification: (scrollNotification){
+                      if (scrollNotification is ScrollUpdateNotification &&  //监听滑动事件
+                          scrollNotification.depth == 0) {          //depth=0:表示只监听child组件,child里面的子组件不监听
+                        //滚动且是列表滚动的时候
+                        _onScroll(scrollNotification.metrics.pixels);
+                      }
+                    },
+                    child:  ListView(
                       children: [
-                        BannerWidget(bannerList: _bannerList),
+                        BannerWidget(bannerList: bannerList),
                         LocalNavWidget(localNavList: localNavList),
                         Container(
                           width: MediaQuery.of(context).size.width,
@@ -121,6 +117,7 @@ class __HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin
         gridNavModel = homeModel.gridNav;
         subNavList = homeModel.subNavList;
         salesBoxModel = homeModel.salesBox;
+        bannerList = homeModel.bannerList;
         _isLoading = false;
       });
 
@@ -177,13 +174,16 @@ class BannerWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    if(_bannerList.length == 0){
+      return Container();
+    }
     return Container(
       height: 240,
       child: Swiper(
         itemCount: _bannerList.length,
         autoplay: true,
         itemBuilder: (BuildContext context,int index){
-          return Image.network(_bannerList[index],fit: BoxFit.fill);
+          return Image.network(_bannerList[index].icon,fit: BoxFit.fill);
         },
         pagination: new SwiperPagination()
       ),
@@ -202,6 +202,9 @@ class LocalNavWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    if(_localNavList.length == 0){
+      return Container();
+    }
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
