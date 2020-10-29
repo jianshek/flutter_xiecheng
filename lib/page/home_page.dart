@@ -10,8 +10,12 @@ import 'package:flutter_xiecheng/widget/sub_nav.dart';
 import 'package:flutter_xiecheng/widget/sales_box.dart';
 import 'package:flutter_xiecheng/model/sales_box_model.dart';
 import 'package:flutter_xiecheng/widget/loading_container.dart';
+import 'package:flutter_xiecheng/widget/webview.dart';
+import 'package:flutter_xiecheng/widget/search_bar.dart';
+import 'dart:ui' as ui show window;
 
 const APPBAR_SCROLL_OFFSET = 100; //appBar最大偏移量
+const String SEARCH_BAR_DEFAULT_TEXT = "网红打卡地 景点 酒店 美食";  //搜索默认值
 
 class HomePage extends StatefulWidget {
   @override
@@ -147,19 +151,64 @@ class _AppBarWidgetState extends State<AppBarWidget>{
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: widget._appBarAlpha,  //获取AppBarWidget中的_appBarAlpha属性
-      child: Container(
-        height: 80,
-        decoration: BoxDecoration(color: Colors.yellow),
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.only(top: 20),
-            child: Text('首页'),
+//    return Opacity(
+//      opacity: widget._appBarAlpha,  //获取AppBarWidget中的_appBarAlpha属性
+//      child: Container(
+//        height: 80,
+//        decoration: BoxDecoration(color: Colors.yellow),
+//        child: Center(
+//          child: Padding(
+//            padding: EdgeInsets.only(top: 20),
+//            child: Text('首页'),
+//          ),
+//        ),
+//      ),
+//    );
+      return Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(   //线性渐变
+                //AppBar渐变遮罩背景
+                colors: [Color(0x66000000), Colors.transparent],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Container(
+              padding: EdgeInsets.only(top: MediaQueryData.fromWindow(ui.window).padding.top),  //刘海高度
+              height: 80,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color:
+                  Color.fromARGB((widget._appBarAlpha * 255).toInt(), 255, 255, 255)),
+              child: SearchBar(
+                searchBarType: widget._appBarAlpha > 0.3
+                    ? SearchBarType.homeLight
+                    : SearchBarType.home,
+                inputBoxClick: _jumpToSearch,
+                speakClick: _jumpToSpeak,
+                defaultText: SEARCH_BAR_DEFAULT_TEXT,
+                leftButtonClick: () {},
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+          Container(    //阴影设置
+            height: widget._appBarAlpha > 0.3 ? 0.5 : 0,
+            decoration: BoxDecoration(
+                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 0.5)]),
+          ),
+        ],
+      );
+  }
+
+  _jumpToSearch() {
+
+  }
+
+
+  _jumpToSpeak() {
+
   }
 
 }
@@ -183,7 +232,20 @@ class BannerWidget extends StatelessWidget{
         itemCount: _bannerList.length,
         autoplay: true,
         itemBuilder: (BuildContext context,int index){
-          return Image.network(_bannerList[index].icon,fit: BoxFit.fill);
+          return GestureDetector(
+            onTap: (){
+              CommonModel model = _bannerList[index];
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WebView(
+                    url: model.url,
+                  ),
+                ),
+              );
+            },
+            child: Image.network(_bannerList[index].icon,fit: BoxFit.fill),
+          );
         },
         pagination: new SwiperPagination()
       ),
