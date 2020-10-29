@@ -64,7 +64,7 @@ class _SearchBarState extends State<SearchBar> {
               Container(
                 padding: EdgeInsets.fromLTRB(6, 5, 6, 5),
                 child: widget.hideLeft ?? false
-                    ? null
+                    ? Container()
                     : Icon(
                         Icons.arrow_back_ios,
                         color: Colors.grey,
@@ -129,7 +129,7 @@ class _SearchBarState extends State<SearchBar> {
       height: 30,
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       decoration: BoxDecoration(
-          color: inputBoxColor,
+          color:inputBoxColor,
           borderRadius: BorderRadius.circular(
               widget.searchBarType == SearchBarType.normal ? 5 : 15)),
       child: Row(
@@ -147,14 +147,19 @@ class _SearchBarState extends State<SearchBar> {
                 ? TextField(
                     controller: _controller,
                     onChanged: _onChanged,
-                    autofocus: true,
+//                    autofocus: true,
+                    onSubmitted: (value){
+
+                    },
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.black,
                         fontWeight: FontWeight.w300),
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      border: InputBorder.none,
+                      border:OutlineInputBorder(    //解决文字偏下
+                          borderSide: BorderSide.none
+                      ),
                       hintText: widget.hint ?? "",
                       hintStyle: TextStyle(fontSize: 15),
                     ),
@@ -207,7 +212,20 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   //输入框输入变化
-  _onChanged(String text) {}
+  _onChanged(String text) {
+    if (text.length > 0) {
+      setState(() {
+        showClear = true;
+      });
+    } else {
+      setState(() {
+        showClear = false;
+      });
+    }
+    if (widget.onChanged != null) {
+      widget.onChanged(text);
+    }
+  }
 
   //输入框背景
   _homeFontColor() {

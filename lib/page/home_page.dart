@@ -13,6 +13,8 @@ import 'package:flutter_xiecheng/widget/loading_container.dart';
 import 'package:flutter_xiecheng/widget/webview.dart';
 import 'package:flutter_xiecheng/widget/search_bar.dart';
 import 'dart:ui' as ui show window;
+import 'package:flutter_xiecheng/util/NavigatorUtil.dart';
+import 'package:flutter_xiecheng/page/search_page.dart';
 
 const APPBAR_SCROLL_OFFSET = 100; //appBar最大偏移量
 const String SEARCH_BAR_DEFAULT_TEXT = "网红打卡地 景点 酒店 美食";  //搜索默认值
@@ -189,6 +191,7 @@ class _AppBarWidgetState extends State<AppBarWidget>{
                 inputBoxClick: _jumpToSearch,
                 speakClick: _jumpToSpeak,
                 defaultText: SEARCH_BAR_DEFAULT_TEXT,
+                hideLeft: true,
                 leftButtonClick: () {},
               ),
             ),
@@ -203,7 +206,7 @@ class _AppBarWidgetState extends State<AppBarWidget>{
   }
 
   _jumpToSearch() {
-
+    NavigatorUtil.push(context, SearchPage(hint: SEARCH_BAR_DEFAULT_TEXT,hideLeft: false,keyword: "123",));
   }
 
 

@@ -11,6 +11,7 @@ class SearchDao {
       Utf8Decoder utf8decoder = Utf8Decoder(); // fix 中文乱码
       var result = json.decode(utf8decoder.convert(response.bodyBytes));
       SearchModel model = SearchModel.fromJson(result);
+      //实时请求,为了返回结果和搜索的关键字一致,将关键字添加到model
       model.keyword = text;
       return model;
     }else{
